@@ -35,7 +35,7 @@ const basicInfoSchema = z.object({
   bio: z.string().min(10, { message: "Biography must be at least 10 characters" }),
 });
 
-const opportunitySchema = z.object({
+const projectSchema = z.object({
   title: z.string().min(5, { message: "Title must be at least 5 characters" }),
   summary: z.string().min(20, { message: "Summary must be at least 20 characters" }),
   description: z.string().min(50, { message: "Description must be at least 50 characters" }),
@@ -45,16 +45,16 @@ const opportunitySchema = z.object({
   city: z.string().optional(),
   isGlobal: z.boolean().default(false),
   proofType: z.string({ required_error: "Please select a proof type" }),
-  goalAmount: z.coerce.number().min(100, { message: "Goal amount must be at least 100" }),
+  fundingGoal: z.coerce.number().min(100, { message: "Funding goal must be at least 100" }),
 });
 
 const walletSchema = z.object({
   walletAddress: z.string().min(26, { message: "Please enter a valid wallet address" }),
 });
 
-const IdentitySchema = z.object({
-  proofOfIdentity: z.string().min(5, { message: "Please provide proof of identity" }),
-  proofOfWork: z.string().min(5, { message: "Please provide proof of your work" }),
+const verificationSchema = z.object({
+  identityProof: z.string().min(5, { message: "Please provide proof of identity" }),
+  workProof: z.string().min(5, { message: "Please provide proof of your work" }),
   agreeToTerms: z.boolean().refine(val => val === true, {
     message: "You must agree to the terms and conditions",
   }),
@@ -79,35 +79,35 @@ const RecipientOnboarding: React.FC = () => {
 
   const steps: FormStep[] = [
     {
-      title: "Basic Information",
-      description: "Tell us about yourself",
+      title: "About You",
+      description: "Tell us about yourself or your organization",
       icon: <UserPlus size={18} />,
       schema: basicInfoSchema,
     },
     {
-      title: "Opportunity Details",
-      description: "Describe your project",
+      title: "Project Details",
+      description: "Describe your project and its impact",
       icon: <FileText size={18} />,
-      schema: opportunitySchema,
+      schema: projectSchema,
     },
     {
-      title: "Wallet Setup",
-      description: "Configure your wallet",
+      title: "Payment Setup",
+      description: "How you'll receive donations",
       icon: <CreditCard size={18} />,
       schema: walletSchema,
     },
     {
-      title: "Identity Verification",
-      description: "Verify your identity",
+      title: "Verification",
+      description: "Verify your identity and work",
       icon: <Shield size={18} />,
-      schema: IdentitySchema,
+      schema: verificationSchema,
     },
   ];
 
   const form = useForm<z.infer<typeof basicInfoSchema> | 
-                        z.infer<typeof opportunitySchema> | 
+                        z.infer<typeof projectSchema> | 
                         z.infer<typeof walletSchema> | 
-                        z.infer<typeof IdentitySchema>>({
+                        z.infer<typeof verificationSchema>>({
     resolver: zodResolver(getStepSchema()),
     defaultValues: formData,
   });
@@ -130,8 +130,8 @@ const RecipientOnboarding: React.FC = () => {
     // Here you would typically send the data to your backend/blockchain
     // For now, we'll just show a success message
     toast({
-      title: "Registration Submitted!",
-      description: "Your recipient profile has been submitted for verification.",
+      title: "Project Submitted!",
+      description: "Your project has been submitted for verification. We'll review it shortly.",
     });
     
     // Optionally redirect to a success page or dashboard
@@ -171,9 +171,9 @@ const RecipientOnboarding: React.FC = () => {
       <main className="flex-grow py-12 md:py-16 lg:py-20">
         <div className="container-custom max-w-3xl">
           <div className="text-center mb-8">
-            <h1 className="text-3xl font-display font-medium mb-3">Become a Recipient</h1>
+            <h1 className="text-3xl font-display font-medium mb-3">Create a Project</h1>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Register as a verified recipient to start receiving donations for your cause
+              Register your project to start receiving donations from our community
             </p>
           </div>
 
@@ -224,7 +224,7 @@ const RecipientOnboarding: React.FC = () => {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Full Name or Organization Name</FormLabel>
+                        <FormLabel>Your Name or Organization Name</FormLabel>
                         <FormControl>
                           <Input placeholder="Enter your name or organization" {...field} />
                         </FormControl>
@@ -238,7 +238,7 @@ const RecipientOnboarding: React.FC = () => {
                     name="bio"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Biography</FormLabel>
+                        <FormLabel>About You</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Tell us about yourself or your organization..." 
@@ -260,7 +260,7 @@ const RecipientOnboarding: React.FC = () => {
                     name="title"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Opportunity Title</FormLabel>
+                        <FormLabel>Project Title</FormLabel>
                         <FormControl>
                           <Input placeholder="Enter a clear title for your project" {...field} />
                         </FormControl>
@@ -274,10 +274,10 @@ const RecipientOnboarding: React.FC = () => {
                     name="summary"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Summary</FormLabel>
+                        <FormLabel>Short Summary</FormLabel>
                         <FormControl>
                           <Textarea 
-                            placeholder="A brief summary of your project..." 
+                            placeholder="A brief summary of your project (1-2 sentences)..." 
                             className="min-h-[80px]"
                             {...field} 
                           />
@@ -292,7 +292,7 @@ const RecipientOnboarding: React.FC = () => {
                     name="description"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Detailed Description</FormLabel>
+                        <FormLabel>Project Description</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Provide a detailed description of your project..." 
@@ -310,7 +310,7 @@ const RecipientOnboarding: React.FC = () => {
                     name="impact"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>How $1K Could Help</FormLabel>
+                        <FormLabel>How Donations Will Help</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Explain the impact that donations will make..." 
@@ -329,7 +329,7 @@ const RecipientOnboarding: React.FC = () => {
                       name="category"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Category</FormLabel>
+                          <FormLabel>Project Category</FormLabel>
                           <Select 
                             onValueChange={field.onChange} 
                             defaultValue={field.value}
@@ -364,7 +364,7 @@ const RecipientOnboarding: React.FC = () => {
                           >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select proof type" />
+                                <SelectValue placeholder="How will you show your progress?" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -433,7 +433,7 @@ const RecipientOnboarding: React.FC = () => {
                   
                   <FormField
                     control={form.control}
-                    name="goalAmount"
+                    name="fundingGoal"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Funding Goal ($)</FormLabel>
@@ -484,10 +484,10 @@ const RecipientOnboarding: React.FC = () => {
                 <>
                   <FormField
                     control={form.control}
-                    name="proofOfIdentity"
+                    name="identityProof"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Proof of Identity</FormLabel>
+                        <FormLabel>Identity Verification</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Provide links to your identity verification documents..." 
@@ -502,10 +502,10 @@ const RecipientOnboarding: React.FC = () => {
                   
                   <FormField
                     control={form.control}
-                    name="proofOfWork"
+                    name="workProof"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Proof of Work</FormLabel>
+                        <FormLabel>Past Work Examples</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Provide links or descriptions of your previous work, achievements, etc..." 
@@ -554,7 +554,7 @@ const RecipientOnboarding: React.FC = () => {
                   {step < steps.length - 1 ? (
                     <>Next <ChevronRight className="ml-2 h-4 w-4" /></>
                   ) : (
-                    "Submit Application"
+                    "Submit Project"
                   )}
                 </Button>
               </div>
