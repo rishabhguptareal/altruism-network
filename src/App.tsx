@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Web3Modal } from "@web3modal/react";
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { configureChains, createClient, WagmiConfig } from "wagmi";
 import { mainnet, polygonMumbai, polygon } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { Web3Provider } from "@/lib/web3/Web3Provider";
@@ -31,14 +31,14 @@ const { chains, publicClient } = configureChains(
   [publicProvider()]
 );
 
-const wagmiConfig = createConfig({
+const wagmiConfig = createClient({
   autoConnect: true,
   publicClient,
 });
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <WagmiConfig config={wagmiConfig}>
+    <WagmiConfig client={wagmiConfig}>
       <Web3Provider>
         <TooltipProvider>
           <Toaster />
@@ -61,7 +61,7 @@ const App = () => (
         </TooltipProvider>
       </Web3Provider>
     </WagmiConfig>
-    <Web3Modal projectId={projectId} ethereumClient={wagmiConfig.connector as any} />
+    <Web3Modal projectId={projectId} ethereumClient={wagmiConfig} />
   </QueryClientProvider>
 );
 
