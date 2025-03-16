@@ -28,28 +28,27 @@ const Hero = () => {
 
             <AnimatedAppear animation="fade-up" delay={200}>
               <h1 className="font-display font-medium mb-6">
-                Supporting verified causes with proof and transparency
+                Fuel dreams with transparent and direct support
               </h1>
             </AnimatedAppear>
 
             <AnimatedAppear animation="fade-up" delay={400}>
               <p className="text-lg text-gray-600 mb-8 max-w-xl mx-auto lg:mx-0">
-                A decentralized donation platform that enables individuals to
-                support verified recipients using cryptocurrency, ensuring
-                transparency and minimal transaction fees.
+                A decentralized platform that connects dreamers with supporters using cryptocurrency, 
+                ensuring your contributions create real impact with full transparency and minimal fees.
               </p>
             </AnimatedAppear>
 
             <AnimatedAppear animation="fade-up" delay={600}>
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-4">
-                <Link to="/opportunities">
+                <Link to="/donor-dashboard">
                   <Button size="lg" rightIcon={<ArrowRight size={18} />}>
-                    Browse Opportunities
+                    Become a Donor
                   </Button>
                 </Link>
-                <Link to="/how-it-works">
+                <Link to="/recipient-onboarding">
                   <Button variant="outline" size="lg">
-                    Learn How It Works
+                    Become a Recipient
                   </Button>
                 </Link>
               </div>

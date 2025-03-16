@@ -37,7 +37,7 @@ const Navbar = () => {
             to="/"
             className="text-xl font-display font-semibold tracking-tight transition-opacity hover:opacity-80"
           >
-            ProofOfScope
+            Fuel My Dream
           </Link>
         </div>
 
@@ -78,11 +78,6 @@ const Navbar = () => {
               className="text-sm"
             >
               My Donations
-            </Button>
-          </Link>
-          <Link to="/recipient-onboarding">
-            <Button variant="outline" size="sm" className="text-sm">
-              Create Project
             </Button>
           </Link>
           <Link to="/account">
@@ -151,15 +146,6 @@ const Navbar = () => {
                 className="justify-start mb-4"
               >
                 My Donations
-              </Button>
-            </Link>
-            <Link to="/recipient-onboarding" onClick={() => setIsMenuOpen(false)}>
-              <Button
-                variant="outline"
-                fullWidth
-                className="justify-start mb-4"
-              >
-                Create Project
               </Button>
             </Link>
             <Link to="/account" onClick={() => setIsMenuOpen(false)}>
