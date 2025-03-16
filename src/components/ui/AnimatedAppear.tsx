@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
-type AnimationVariant = "fade-in" | "fade-up" | "scale-in" | "blur-in";
+type AnimationVariant = "fade-in" | "fade-up" | "scale-in" | "blur-in" | "fade-right" | "fade-left";
 
 interface AnimatedAppearProps {
   children: React.ReactNode;
