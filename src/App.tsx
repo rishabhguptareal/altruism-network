@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Web3Modal } from "@web3modal/react";
-import { configureChains, createClient, WagmiConfig } from "wagmi";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { mainnet, polygonMumbai, polygon } from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { Web3Provider } from "@/lib/web3/Web3Provider";
@@ -26,19 +26,21 @@ const queryClient = new QueryClient();
 // Configure Web3Modal
 const projectId = "YOUR_WC_PROJECT_ID"; // Replace with your WalletConnect projectId
 
-const { chains, publicClient } = configureChains(
+const { chains, provider, webSocketProvider } = configureChains(
   [mainnet, polygon, polygonMumbai],
   [publicProvider()]
 );
 
-const wagmiConfig = createClient({
+// Use createConfig instead of createClient
+const wagmiConfig = createConfig({
   autoConnect: true,
-  publicClient,
+  provider,
+  webSocketProvider,
 });
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <WagmiConfig client={wagmiConfig}>
+    <WagmiConfig config={wagmiConfig}>
       <Web3Provider>
         <TooltipProvider>
           <Toaster />
